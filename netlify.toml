@@ -1,0 +1,19 @@
+[build]
+  command = "cd mobile && npm install && npx expo export -p web"
+  publish = "mobile/dist"
+
+[functions]
+  external_node_modules = ["@nestjs/core", "@nestjs/common", "reflect-metadata", "rxjs", "pg", "sqlite3", "typeorm"]
+  node_bundler = "esbuild"
+  directory = "netlify/functions"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
