@@ -1,8 +1,16 @@
 import axios from 'axios';
+import { Platform } from 'react-native';
 
-// Replace with your local IP if running on a real device
-// For Android Emulator, 10.0.2.2 usually maps to localhost
-const API_URL = 'http://10.0.2.2:3000'; 
+// Adjust API URL based on platform
+let API_URL = 'http://10.0.2.2:3000'; // Android Emulator default
+
+if (Platform.OS === 'web') {
+  // On Netlify, we use the proxy configured in netlify.toml
+  // /api/* -> /.netlify/functions/api/*
+  API_URL = '/api';
+} else if (Platform.OS === 'ios') {
+  API_URL = 'http://localhost:3000'; // iOS Simulator
+}
 
 export const api = axios.create({
   baseURL: API_URL,
