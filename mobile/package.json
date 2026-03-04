@@ -12,6 +12,7 @@
     "@expo/metro-runtime": "~55.0.6",
     "@expo/vector-icons": "^15.0.2",
     "axios": "^1.6.0",
+    "babel-preset-expo": "~55.0.8",
     "date-fns": "^3.0.0",
     "expo": "~55.0.4",
     "expo-constants": "~55.0.7",

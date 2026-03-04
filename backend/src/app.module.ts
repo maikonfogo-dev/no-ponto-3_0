@@ -22,6 +22,17 @@ import { AdjustmentsModule } from './adjustments/adjustments.module';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => {
         const dbType = configService.get('DB_TYPE') || 'sqlite';
+        const databaseUrl = configService.get<string>('DATABASE_URL');
+        
+        if (databaseUrl) {
+          return {
+            type: 'postgres',
+            url: databaseUrl,
+            entities: [Company, User, AttendanceRecord, AdjustmentRequest],
+            synchronize: true,
+            ssl: { rejectUnauthorized: false },
+          };
+        }
         
         if (dbType === 'postgres') {
           return {
