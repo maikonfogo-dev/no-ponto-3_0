@@ -1,6 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { api, setAuthToken } from '../services/api';
-import { useRouter, useSegments } from 'expo-router';
+import { useRouter, useSegments, useRootNavigationState } from 'expo-router';
 
 interface AuthContextData {
   signIn: (email: string, pass: string) => Promise<void>;
@@ -16,6 +16,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const segments = useSegments();
+  const rootNavigationState = useRootNavigationState();
 
   // Load token from storage on mount (Mock for now, should use AsyncStorage)
   useEffect(() => {
@@ -25,7 +26,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
 
   useEffect(() => {
-    if (loading) return;
+    if (loading || !rootNavigationState?.key) return;
 
     const inAuthGroup = segments[0] === '(auth)';
 
@@ -40,7 +41,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         router.replace('/(app)/home');
       }
     }
-  }, [user, loading, segments]);
+  }, [user, loading, segments, rootNavigationState?.key]);
 
   const signIn = async (email: string, pass: string) => {
     try {
